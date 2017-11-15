@@ -13,13 +13,14 @@ import 'blueimp-load-image/js/load-image-orientation';
 import 'blueimp-load-image/js/load-image-meta';
 import 'blueimp-load-image/js/load-image-exif';
 
-import normalizeSize from '../../utils/sizing';
-
 registerComponent('layer-image-card', {
   mixins: [CardMixin, CardPrimitiveMixin],
   style: `layer-image-card {
       display: block;
       overflow: hidden;
+    }
+    layer-image-card img {
+      display: block;
     }
     layer-card-view.layer-image-card > * {
       cursor: pointer;

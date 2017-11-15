@@ -1,6 +1,6 @@
 {
   "name": "@layerhq/layer-ui-web",
-  "version": "3.0.36",
+  "version": "3.0.37",
   "description": "The Layer UI for Web provides a library of widgets to simplify adding chat capabilities into your application.",
   "main": "lib-es5/index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "author": "Layer developers <helpdesk@layer.com> (https://layer.com)",
   "license": "Apache-2.0",
   "dependencies": {
-    "@layerhq/layer-websdk": "^3.4.4",
+    "@layerhq/layer-websdk": "^3.4.14",
     "autolinker": "^1.2.1",
     "blueimp-load-image": "^2.9.0",
     "leaflet": "^1.2.0",

@@ -820,10 +820,10 @@ registerComponent('layer-message-list', {
       let needsPagedDataDone = true;
 
       if (this.properties.stuckToBottom) {
-        this.scrollTo(this.scrollHeight - this.clientHeight);
         const cards = this.querySelectorAllArray('layer-message-viewer').map(card => card.nodes.ui).filter(ui => ui);
         let unfinishedCards = cards.filter(card => !card.isHeightAllocated);
         if (unfinishedCards.length) {
+          this.onPagedDataDone(false);
           const onCardFinished = () => {
             unfinishedCards = unfinishedCards.filter(card => !card.isHeightAllocated);
             if (unfinishedCards.length === 0) {
@@ -837,11 +837,13 @@ registerComponent('layer-message-list', {
       } else if (firstVisibleItem && evt.type === 'data' && evt.data.length !== 0) {
         this.scrollTo(firstVisibleItem.offsetTop - this.offsetTop - initialOffset);
       }
-      if (needsPagedDataDone) this.onPagedDataDone();
+      if (needsPagedDataDone) this.onPagedDataDone(true);
     },
 
-    onPagedDataDone() {
-      this.scrollTo(this.scrollHeight - this.clientHeight);
+    onPagedDataDone(isDoneSizingContent) {
+      if (this.properties.stuckToBottom) {
+        this.scrollTo(this.scrollHeight - this.clientHeight);
+      }
     },
   },
 });

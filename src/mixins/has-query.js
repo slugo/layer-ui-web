@@ -71,6 +71,12 @@ module.exports = {
       },
     },
 
+    queryFilter: {
+      set() {
+        if (this.query) this.query.filter = this.properties.queryFilter;
+      },
+    },
+
     /**
      * The Query was generated internally, not passed in as an attribute or property.
      *
@@ -123,6 +129,7 @@ module.exports = {
           paginationWindow: this.pageSize || 50,
           sortBy: this.sortBy,
         });
+        if (this.properties.queryFilter) this.query.filter = this.properties.queryFilter;
         this.hasGeneratedQuery = true;
       }
     },

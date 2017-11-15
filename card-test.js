@@ -12,6 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
     uploadButton.accept = 'image/*';
     conversationPanel.composeButtons = [uploadButton];
 
+    const ResponseModel = Layer.Client.getCardModelClass('ResponseModel');
+    conversationPanel.queryFilter = function(message) {
+        const rootPart = message.getPartsMatchingAttribute({ role: 'root' })[0];
+        const model = rootPart ? client.createCardModel(message, rootPart) : null;
+        if (model && model instanceof ResponseModel && message.sender === client.user) return false;
+        return true;
+    };
+
     var client = window.client = new Layer.Client({
       appId: APP_ID,
       isTrustedDevice: true
