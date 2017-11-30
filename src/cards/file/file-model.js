@@ -62,7 +62,7 @@ class FileModel extends CardModel {
     if (source) {
       sourcePart = new MessagePart(this.source);
       sourcePart.mimeAttributes.role = 'source';
-      sourcePart.mimeAttributes['parent-node-id'] = this.nodeId;
+      sourcePart.mimeAttributes['parent-node-id'] = this.part.getNodeId();
     }
 
     callback(this.source ? [this.part, sourcePart] : [this.part]);

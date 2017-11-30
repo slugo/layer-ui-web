@@ -820,7 +820,7 @@ registerComponent('layer-message-list', {
       let needsPagedDataDone = true;
 
       if (this.properties.stuckToBottom) {
-        const cards = this.querySelectorAllArray('layer-message-viewer').map(card => card.nodes.ui).filter(ui => ui);
+        const cards = this.querySelectorAllArray('layer-card-view').map(card => card.nodes.ui).filter(ui => ui);
         let unfinishedCards = cards.filter(card => !card.isHeightAllocated);
         if (unfinishedCards.length) {
           this.onPagedDataDone(false);
@@ -828,8 +828,8 @@ registerComponent('layer-message-list', {
             unfinishedCards = unfinishedCards.filter(card => !card.isHeightAllocated);
             if (unfinishedCards.length === 0) {
               this.removeEventListener('message-height-change', onCardFinished);
+              setTimeout(() => this.onPagedDataDone(true), 10);
             }
-            this.onPagedDataDone();
           };
           this.addEventListener('message-height-change', onCardFinished);
           needsPagedDataDone = false;

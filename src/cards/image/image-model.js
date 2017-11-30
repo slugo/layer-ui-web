@@ -131,12 +131,12 @@ class ImageModel extends CardModel {
           if (this.source) {
             parts.push(this.source);
             this.source.mimeAttributes.role = 'source';
-            this.source.mimeAttributes['parent-node-id'] = this.nodeId;
+            this.source.mimeAttributes['parent-node-id'] = this.part.getNodeId();
           }
           if (this.preview) {
             parts.push(this.preview);
             this.preview.mimeAttributes.role = 'preview';
-            this.preview.mimeAttributes['parent-node-id'] = this.nodeId;
+            this.preview.mimeAttributes['parent-node-id'] = this.part.getNodeId();
           }
           callback(parts);
         });

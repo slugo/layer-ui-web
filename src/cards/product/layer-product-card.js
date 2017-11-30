@@ -44,6 +44,9 @@ registerComponent('layer-product-card', {
     },
   },
   methods: {
+    onCreate() {
+      this.isHeightAllocated = false;
+    },
     onRerender() {
       this.nodes.name.innerHTML = this.model.name;
       this.nodes.brand.innerHTML = this.model.brand;
@@ -51,7 +54,10 @@ registerComponent('layer-product-card', {
       this.nodes.description.innerHTML = this.model.description;
 
       this.nodes.image.src = this.model.imageUrls[0];
+      this.nodes.image.addEventListener('load', evt => (this.isHeightAllocated = true));
+
       this.toggleClass('layer-no-image', this.model.imageUrls.length === 0);
+      this.isHeightAllocated = this.model.imageUrls.length === 0;
 
       const optionsParent = this.nodes.choices;
 
