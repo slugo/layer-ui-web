@@ -1,5 +1,10 @@
 # Layer UI for Web
 
+## Just Starting?
+
+Use our new XDK! The XDK enables a richer messaging experience and new features will be added there. See the repository at [https://github.com/layerhq/web-xdk](https://github.com/layerhq/web-xdk). Don't worry, Layer UI for Web is still supported.
+
+
 ## Browser Support Matrix:
 
 | Browser          | Version    | OS Tested Against  |
