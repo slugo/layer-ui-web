@@ -1162,4 +1162,77 @@ describe('Components', function() {
       expect(el.querySelectorAll('label').length).toEqual(1);
     });
   });
+
+  describe("The onDetach() method", function() {
+    var avatar;
+    beforeEach(function() {
+      // Run removal
+      avatar = document.createElement('layer-avatar');
+      testRoot.appendChild(avatar);
+      CustomElements.takeRecords();
+      layer.Util.defer.flush();
+    });
+    it("Should be called after removal", function() {
+      spyOn(avatar, "onDetach");
+
+      // Run
+      testRoot.removeChild(avatar);
+      CustomElements.takeRecords();
+      layer.Util.defer.flush();
+
+      // Posttest
+      expect(avatar.onDetach).toHaveBeenCalledWith();
+    });
+
+    it("Should wait and then call onDestroy", function() {
+      spyOn(avatar, "onDestroy");
+
+      // Run
+      testRoot.removeChild(avatar);
+      CustomElements.takeRecords();
+      layer.Util.defer.flush();
+      jasmine.clock().tick(10001);
+
+      // Posttest
+      expect(avatar.onDestroy).toHaveBeenCalledWith();
+    });
+
+    it("Should trigger layer-widget-destroyed and not call onDestroy if event prevented", function() {
+      spyOn(avatar, "onDestroy");
+      avatar.addEventListener('layer-widget-destroyed', function(evt) {
+        expect(evt.detail.target).toBe(avatar);
+        evt.preventDefault();
+      });
+
+      // Run
+      testRoot.removeChild(avatar);
+      CustomElements.takeRecords();
+      layer.Util.defer.flush();
+      jasmine.clock().tick(10001);
+
+      // Posttest
+      expect(avatar.onDestroy).not.toHaveBeenCalled();
+    });
+
+    it("Should trigger layer-widget-destroyed on document.body and not call onDestroy if event prevented", function() {
+      spyOn(avatar, "onDestroy");
+      var f = function(evt) {
+        evt.preventDefault();
+        expect(evt.detail.target).toBe(avatar);
+      };
+      document.body.addEventListener('layer-widget-destroyed', f);
+
+      // Run
+      testRoot.removeChild(avatar);
+      CustomElements.takeRecords();
+      layer.Util.defer.flush();
+      jasmine.clock().tick(10001);
+
+      // Posttest
+      expect(avatar.onDestroy).not.toHaveBeenCalled();
+
+      // Cleanup
+      document.body.removeEventListener('layer-widget-destroyed', f);
+    });
+  });
 });

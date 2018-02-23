@@ -1,5 +1,9 @@
 # Layer UI for Web Change Log
 
+## 1.0.7
+
+* Redefines the `layer-widget-destroyed` event; it now triggers on `document.body` for each removed component; access `evt.detail.target` not `evt.target` to determine what UI Component has been removed and is about to be destroyed.
+
 ## 1.0.6
 
 * Fixes React adaptor for React 16

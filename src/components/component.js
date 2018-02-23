@@ -1165,13 +1165,22 @@ function _registerComponent(tagName) {
    *
    * ```
    * document.body.addEventListener('layer-widget-destroyed', function(evt) {
-   *    if (evt.target === nodeToNotDestroy) {
+   *    if (evt.detail.target === nodeToNotDestroy) {
    *      evt.preventDefault();
    *    }
    * });
    * ```
    *
+   * > *Note*
+   * >
+   * > Once a node has been removed from the DOM, its events cannot bubble up.  So we *also* trigger the event on
+   * > `document.body`. This means that `evt.target` becomes `document.body`. So use `evt.detail.target`
+   * > not `evt.target` to identify the removed node.
+   *
    * @event layer-widget-destroyed
+   * @param {Event} evt
+   * @param {Object} evt.detail
+   * @param {Layer.UI.Component} evt.detail.target
    */
   classDef.detachedCallback = {
     value: function detachedCallback() {
@@ -1179,7 +1188,9 @@ function _registerComponent(tagName) {
 
       // Wait 10 seconds after its been removed, then check to see if its still removed from the dom before doing cleanup and destroy.
       setTimeout(() => {
-        if (!document.body.contains(this) && !document.head.contains(this) && this.trigger('layer-widget-destroyed')) {
+        if (this.properties._internalState.onDestroyCalled) return;
+        if (document.body.contains(this) || document.head.contains(this)) return;
+        if (this.trigger('layer-widget-destroyed', { target: this }) && (!document.body || this.trigger.apply(document.body, ['layer-widget-destroyed', { target: this }] ) )) {
           this.onDestroy();
         }
       }, 10000);
