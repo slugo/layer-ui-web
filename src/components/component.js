@@ -1184,14 +1184,19 @@ function _registerComponent(tagName) {
    */
   classDef.detachedCallback = {
     value: function detachedCallback() {
+      const isMainComponent = this._isMainComponent &&
+        (this.properties.mainComponent === this || this.properties.mainComponent === null);
+
       this.onDetach();
 
       // Wait 10 seconds after its been removed, then check to see if its still removed from the dom before doing cleanup and destroy.
       setTimeout(() => {
         if (this.properties._internalState.onDestroyCalled) return;
         if (document.body.contains(this) || document.head.contains(this)) return;
-        if (this.trigger('layer-widget-destroyed', { target: this }) && (!document.body || this.trigger.apply(document.body, ['layer-widget-destroyed', { target: this }] ) )) {
-          this.onDestroy();
+        if (this.trigger('layer-widget-destroyed', { target: this })) {
+          if (!isMainComponent || (!document.body || this.trigger.apply(document.body, ['layer-widget-destroyed', { target: this }] ) )) {
+            this.onDestroy();
+          }
         }
       }, 10000);
     },

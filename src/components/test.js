@@ -1215,21 +1215,26 @@ describe('Components', function() {
     });
 
     it("Should trigger layer-widget-destroyed on document.body and not call onDestroy if event prevented", function() {
-      spyOn(avatar, "onDestroy");
+      var presence = document.createElement('layer-presence');
+      testRoot.appendChild(presence);
+      CustomElements.takeRecords();
+      layer.Util.defer.flush();
+
+      spyOn(presence, "onDestroy");
       var f = function(evt) {
         evt.preventDefault();
-        expect(evt.detail.target).toBe(avatar);
+        expect(evt.detail.target).toBe(presence);
       };
       document.body.addEventListener('layer-widget-destroyed', f);
 
       // Run
-      testRoot.removeChild(avatar);
+      testRoot.removeChild(presence);
       CustomElements.takeRecords();
       layer.Util.defer.flush();
       jasmine.clock().tick(10001);
 
       // Posttest
-      expect(avatar.onDestroy).not.toHaveBeenCalled();
+      expect(presence.onDestroy).not.toHaveBeenCalled();
 
       // Cleanup
       document.body.removeEventListener('layer-widget-destroyed', f);
